@@ -1,9 +1,11 @@
 const models = require('../models');
 const express = require('express');
+const validate = require('express-validation');
+const validationRules = require('./validationRules');
 
 const router = express.Router();// eslint-disable-line new-cap
 
-router.post('/create', (req, res) => {
+router.post('/', validate(validationRules.transport), (req, res) => {
   models.Transport.create({
     name: req.body.transportName,
     volume: req.body.volume,
@@ -27,7 +29,7 @@ router.get('/:id', (req, res) => {
     res.send(data));
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validate(validationRules.transport), (req, res) => {
   models.Transport.update({
     name: req.body.transportName,
     volume: req.body.volume,
