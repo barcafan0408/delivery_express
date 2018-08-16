@@ -12,7 +12,7 @@ module.exports = {
       host: 'localhost',
       name: 'delivery_db',
       user: 'root',
-      password: 'barcafan1',
+      password: 'barcafan1'
     },
   },
   production: {
