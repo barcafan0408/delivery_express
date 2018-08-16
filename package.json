@@ -8,7 +8,8 @@
     "test-unit": "cross-env NODE_ENV=test ./node_modules/.bin/mocha test/unit/*.test.js",
     "test-integration": "cross-env NODE_ENV=test ./node_modules/.bin/mocha test/integration/*.test.js",
     "lint": "esw *.js routes config models bin --color",
-    "fix": "esw *.js routes config models bin --color --fix"
+    "fix": "esw *.js routes config models bin --color --fix",
+    "precommit": "yarn run fix"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
