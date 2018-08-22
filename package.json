@@ -7,8 +7,8 @@
     "test": "npm run test-unit && npm run test-integration",
     "test-unit": "cross-env NODE_ENV=test ./node_modules/.bin/mocha test/unit/*.test.js",
     "test-integration": "cross-env NODE_ENV=test ./node_modules/.bin/mocha test/integration/*.test.js",
-    "lint": "esw *.js routes config models bin --color",
-    "fix": "esw *.js routes config models bin --color --fix",
+    "lint": "esw *.js routes controllers config models bin --color",
+    "fix": "esw *.js routes controllers config models bin --color --fix",
     "precommit": "yarn run fix"
   },
   "dependencies": {
