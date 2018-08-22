@@ -1,61 +1,18 @@
-const models = require('../models');
 const express = require('express');
 const validate = require('express-validation');
-const validationRules = require('./validationRules');
+const validationRules = require('../config/paramValidation');
+const routeListController = require('../controllers/routeList');
 
 const router = express.Router();// eslint-disable-line new-cap
 
-router.post('/', validate(validationRules.routeList), (req, res) => {
-  models.RouteList.create({
-    date: req.body.date,
-    expectingDate: req.body.expectingDate,
-    actualDate: req.body.actualDate,
-    idSending: req.body.idSending,
-    idTransport: req.body.idTransport,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-  }).then(data =>
-    res.send(data));
-});
+router.post('/', validate(validationRules.routeList), routeListController.create);
 
-router.get('/', (req, res) => {
-  models.RouteList.findAll().then(data =>
-    res.send(data));
-});
+router.get('/', routeListController.getAll);
 
-router.get('/:id', (req, res) => {
-  models.RouteList.find({
-    where: {
-      id: req.params.id,
-    },
-  }).then(data =>
-    res.send(data));
-});
+router.get('/:id', routeListController.getById);
 
-router.put('/:id', validate(validationRules.routeList), (req, res) => {
-  models.RouteList.update({
-    date: req.body.date,
-    expectingDate: req.body.expectingDate,
-    actualDate: req.body.actualDate,
-    idSending: req.body.idSending,
-    idTransport: req.body.idTransport,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-  }, {
-    where: {
-      id: req.params.id,
-    },
-  }).then(data =>
-    res.send(data));
-});
+router.put('/:id', validate(validationRules.routeList), routeListController.update);
 
-router.delete('/:id', (req, res) => {
-  models.RouteList.destroy({
-    where: {
-      id: req.params.id,
-    },
-  }).then(() =>
-    res.sendStatus(204));
-});
+router.delete('/:id', routeListController.deleteById);
 
 module.exports = router;

@@ -1,55 +1,18 @@
-const models = require('../models');
 const express = require('express');
 const validate = require('express-validation');
-const validationRules = require('./validationRules');
+const validationRules = require('../config/paramValidation');
+const userController = require('../controllers/user');
 
 const router = express.Router();// eslint-disable-line new-cap
 
-router.post('/', validate(validationRules.user), (req, res) => {
-  models.User.create({
-    name: req.body.userName,
-    phone: req.body.phone,
-    email: req.body.email,
-    password: req.body.password,
-  }).then(data =>
-    res.send(data));
-});
+router.post('/', validate(validationRules.user), userController.create);
 
-router.get('/', (req, res) => {
-  models.User.findAll().then(data =>
-    res.send(data));
-});
+router.get('/', userController.getAll);
 
-router.get('/:id', (req, res) => {
-  models.User.find({
-    where: {
-      id: req.params.id,
-    },
-  }).then(data =>
-    res.send(data));
-});
+router.get('/:id', userController.getById);
 
-router.put('/:id', validate(validationRules.user), (req, res) => {
-  models.User.update({
-    name: req.body.userName,
-    phone: req.body.phone,
-    email: req.body.email,
-    password: req.body.password,
-  }, {
-    where: {
-      id: req.params.id,
-    },
-  }).then(data =>
-    res.send(data));
-});
+router.put('/:id', validate(validationRules.user), userController.update);
 
-router.delete('/:id', (req, res) => {
-  models.User.destroy({
-    where: {
-      id: req.params.id,
-    },
-  }).then(() =>
-    res.sendStatus(204));
-});
+router.delete('/:id', userController.deleteById);
 
 module.exports = router;

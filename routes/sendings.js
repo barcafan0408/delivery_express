@@ -1,71 +1,18 @@
-const models = require('../models');
 const express = require('express');
 const validate = require('express-validation');
-const validationRules = require('./validationRules');
+const validationRules = require('../config/paramValidation');
+const sendingController = require('../controllers/sending');
 
 const router = express.Router();// eslint-disable-line new-cap
 
-router.post('/', validate(validationRules.sending), (req, res) => {
-  models.Sending.create({
-    date: req.body.date,
-    number: req.body.number,
-    status: req.body.status,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-    weight: req.body.weight,
-    amount: req.body.amount,
-    coment: req.body.coment,
-    idUserSender: req.body.idUserSender,
-    idUserReceiver: req.body.idUserReceiver,
-    fragile: req.body.fragile,
-    cost: req.body.cost,
-  }).then(data =>
-    res.send(data));
-});
+router.post('/', validate(validationRules.sending), sendingController.create);
 
-router.get('/', (req, res) => {
-  models.Sending.findAll().then(data =>
-    res.send(data));
-});
+router.get('/', sendingController.getAll);
 
-router.get('/:id', (req, res) => {
-  models.Sending.find({
-    where: {
-      id: req.params.id,
-    },
-  }).then(data =>
-    res.send(data));
-});
+router.get('/:id', sendingController.getById);
 
-router.put('/:id', validate(validationRules.sending), (req, res) => {
-  models.Sending.update({
-    date: req.body.date,
-    number: req.body.number,
-    status: req.body.status,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-    weight: req.body.weight,
-    amount: req.body.amount,
-    coment: req.body.coment,
-    idUserSender: req.body.idUserSender,
-    idUserReceiver: req.body.idUserReceiver,
-    fragile: req.body.fragile,
-    cost: req.body.cost,
-  }, {
-    where: {
-      id: req.params.id,
-    },
-  }).then(data =>
-    res.send(data));
-});
+router.put('/:id', validate(validationRules.sending), sendingController.update);
 
-router.delete('/:id', (req, res) => {
-  models.Sending.destroy({
-    where: {
-      id: req.params.id,
-    },
-  }).then(() =>
-    res.sendStatus(204));
-});
+router.delete('/:id', sendingController.deleteById);
 
 module.exports = router;
