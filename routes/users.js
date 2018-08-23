@@ -7,7 +7,7 @@ const router = express.Router();// eslint-disable-line new-cap
 
 router.post('/', validate(validationRules.user.create), userController.create);
 
-router.get('/', userController.getAll);
+router.get('/', validate(validationRules.user.getAll), userController.getAll);
 
 router.get('/:id', userController.getById);
 

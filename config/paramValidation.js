@@ -32,6 +32,14 @@ module.exports.user = {
       allowUnknownParams: false,
     },
   },
+  getAll: {
+    query: {
+      page: Joi.number().integer().positive(),
+    },
+    options: {
+      allowUnknownQuery: false,
+    },
+  },
 };
 
 module.exports.storage = {

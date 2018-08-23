@@ -1,6 +1,8 @@
 const models = require('../models');
 const httpStatus = require('http-status');
 
+const { perPage } = require('../config/config');
+
 function create(req, res) {
   models.User.create({
     name: req.body.userName,
@@ -13,10 +15,14 @@ function create(req, res) {
 }
 
 function getAll(req, res) {
-  models.User.findAll({
+  models.User.findAndCountAll({
     attributes: ['name', 'phone', 'email'],
-  }).then(data =>
-    res.send(data));
+    offset: perPage * ((req.query.page || 1) - 1),
+    limit: perPage,
+  }).then((data) => {
+    const pages = Math.ceil(data.count / perPage);
+    res.set('x-total-count', pages).json(data.rows);
+  });
 }
 
 function getById(req, res) {
