@@ -1,30 +1,26 @@
 const models = require('../models');
+const httpStatus = require('http-status');
+const _ = require('lodash');
 
 function create(req, res) {
-  models.Sending.create({
-    date: req.body.date,
-    number: req.body.number,
-    status: req.body.status,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-    weight: req.body.weight,
-    amount: req.body.amount,
-    coment: req.body.coment,
-    idUserSender: req.body.idUserSender,
-    idUserReceiver: req.body.idUserReceiver,
-    fragile: req.body.fragile,
-    cost: req.body.cost,
-  }).then(data =>
-    res.send(data));
+  models.Sending.create(
+    _.pick(req.body, ['date', 'number', 'status', 'idStorageSender', 'idStorageReceiver',
+      'weight', 'amount', 'coment', 'idUserSender', 'idUserReceiver', 'fragile', 'cost'])
+  ).then(data =>
+    res.status(httpStatus.CREATED).json({ id: data.get('id') }),
+  );
 }
 
 function getAll(req, res) {
-  models.Sending.findAll().then(data =>
+  models.Sending.findAll({
+    attributes: ['date', 'number', 'status', 'weight', 'amount', 'coment', 'fragile', 'cost'],
+  }).then(data =>
     res.send(data));
 }
 
 function getById(req, res) {
   models.Sending.find({
+    attributes: ['date', 'number', 'status', 'weight', 'amount', 'coment', 'fragile', 'cost'],
     where: {
       id: req.params.id,
     },
@@ -33,25 +29,12 @@ function getById(req, res) {
 }
 
 function update(req, res) {
-  models.Sending.update({
-    date: req.body.date,
-    number: req.body.number,
-    status: req.body.status,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-    weight: req.body.weight,
-    amount: req.body.amount,
-    coment: req.body.coment,
-    idUserSender: req.body.idUserSender,
-    idUserReceiver: req.body.idUserReceiver,
-    fragile: req.body.fragile,
-    cost: req.body.cost,
-  }, {
+  models.Sending.update(_.pickBy(req.body), {
     where: {
       id: req.params.id,
     },
-  }).then(data =>
-    res.send(data));
+  }).then(() =>
+    res.sendStatus(httpStatus.OK));
 }
 
 function deleteById(req, res) {
@@ -60,7 +43,7 @@ function deleteById(req, res) {
       id: req.params.id,
     },
   }).then(() =>
-    res.sendStatus(204));
+    res.sendStatus(httpStatus.NO_CONTENT));
 }
 
 module.exports = {

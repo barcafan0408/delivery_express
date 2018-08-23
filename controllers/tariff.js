@@ -1,25 +1,25 @@
 const models = require('../models');
+const httpStatus = require('http-status');
+const _ = require('lodash');
 
 function create(req, res) {
-  models.Tariff.create({
-    date: req.body.date,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-    minWeight: req.body.minWeight,
-    maxWeight: req.body.maxWeight,
-    fragile: req.body.fragile,
-    price: req.body.price,
-  }).then(data =>
-    res.send(data));
+  models.Tariff.create(
+    _.pick(req.body, ['date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'])
+  ).then(data =>
+    res.status(httpStatus.CREATED).json({ id: data.get('id') }),
+  );
 }
 
 function getAll(req, res) {
-  models.Tariff.findAll().then(data =>
+  models.Tariff.findAll({
+    attributes: ['date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
+  }).then(data =>
     res.send(data));
 }
 
 function getById(req, res) {
   models.Tariff.find({
+    attributes: ['date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
     where: {
       id: req.params.id,
     },
@@ -28,20 +28,12 @@ function getById(req, res) {
 }
 
 function update(req, res) {
-  models.Tariff.update({
-    date: req.body.date,
-    idStorageSender: req.body.idStorageSender,
-    idStorageReceiver: req.body.idStorageReceiver,
-    minWeight: req.body.minWeight,
-    maxWeight: req.body.maxWeight,
-    fragile: req.body.fragile,
-    price: req.body.price,
-  }, {
+  models.Tariff.update(_.pickBy(req.body), {
     where: {
       id: req.params.id,
     },
-  }).then(data =>
-    res.send(data));
+  }).then(() =>
+    res.sendStatus(httpStatus.OK));
 }
 
 function deleteById(req, res) {
@@ -50,7 +42,7 @@ function deleteById(req, res) {
       id: req.params.id,
     },
   }).then(() =>
-    res.sendStatus(204));
+    res.sendStatus(httpStatus.NO_CONTENT));
 }
 
 module.exports = {

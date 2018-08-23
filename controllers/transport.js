@@ -1,4 +1,5 @@
 const models = require('../models');
+const httpStatus = require('http-status');
 
 function create(req, res) {
   models.Transport.create({
@@ -7,16 +8,20 @@ function create(req, res) {
     maxWeight: req.body.maxWeight,
     speed: req.body.speed,
   }).then(data =>
-    res.send(data));
+    res.status(httpStatus.CREATED).json({ id: data.get('id') }),
+  );
 }
 
 function getAll(req, res) {
-  models.Transport.findAll().then(data =>
+  models.Transport.findAll({
+    attributes: ['name', 'volume', 'maxWeight', 'speed'],
+  }).then(data =>
     res.send(data));
 }
 
 function getById(req, res) {
   models.Transport.find({
+    attributes: ['name', 'volume', 'maxWeight', 'speed'],
     where: {
       id: req.params.id,
     },
@@ -25,17 +30,17 @@ function getById(req, res) {
 }
 
 function update(req, res) {
-  models.Transport.update({
-    name: req.body.transportName,
-    volume: req.body.volume,
-    maxWeight: req.body.maxWeight,
-    speed: req.body.speed,
-  }, {
+  const transport = {};
+  if (req.body.transportName !== undefined) transport.name = req.body.transportName;
+  if (req.body.volume !== undefined) transport.volume = req.body.volume;
+  if (req.body.maxWeight !== undefined) transport.maxWeight = req.body.maxWeight;
+  if (req.body.speed !== undefined) transport.speed = req.body.speed;
+  models.Transport.update(transport, {
     where: {
       id: req.params.id,
     },
-  }).then(data =>
-    res.send(data));
+  }).then(() =>
+    res.sendStatus(httpStatus.OK));
 }
 
 function deleteById(req, res) {
@@ -44,7 +49,7 @@ function deleteById(req, res) {
       id: req.params.id,
     },
   }).then(() =>
-    res.sendStatus(204));
+    res.sendStatus(httpStatus.NO_CONTENT));
 }
 
 module.exports = {

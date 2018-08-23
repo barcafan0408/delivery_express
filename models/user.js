@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     phone: {
-      type: DataTypes.STRING(10), // eslint-disable-line new-cap
+      type: DataTypes.STRING(13), // eslint-disable-line new-cap
       allowNull: false,
-      validate: { isNumeric: true },
+      // validate: { isNumeric: true },
       unique: true,
     },
     email: {

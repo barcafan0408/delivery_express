@@ -5,13 +5,13 @@ const storageController = require('../controllers/storage');
 
 const router = express.Router();// eslint-disable-line new-cap
 
-router.post('/', validate(validationRules.storage), storageController.create);
+router.post('/', validate(validationRules.storage.create), storageController.create);
 
 router.get('/', storageController.getAll);
 
 router.get('/:id', storageController.getById);
 
-router.put('/:id', validate(validationRules.storage), storageController.update);
+router.put('/:id', validate(validationRules.storage.update), storageController.update);
 
 router.delete('/:id', storageController.deleteById);
 
