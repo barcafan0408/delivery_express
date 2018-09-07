@@ -17,6 +17,8 @@ const httpStatus = require('http-status');
 const APIError = require('./APIError');
 const expressValidation = require('express-validation');
 
+const cors = require('cors');
+
 const app = express();
 
 // view engine setup
@@ -30,6 +32,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const allowedDomains = [
+  'http://localhost:8080',
+  'https://my-delivery-react.herokuapp.com',
+];
+
+app.use(cors({
+  origin: (origin1, callback) => {
+    if (!origin1 || allowedDomains.indexOf(origin1) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Not allowed by CORS: ${origin1}`));
+    }
+  },
+}));
 
 app.use('/', routes);
 app.use('/users', users);
