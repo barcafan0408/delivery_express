@@ -14,14 +14,14 @@ function create(req, res) {
 
 function getAll(req, res) {
   models.Transport.findAll({
-    attributes: ['name', 'volume', 'maxWeight', 'speed'],
+    attributes: ['id', 'name', 'volume', 'maxWeight', 'speed'],
   }).then(data =>
     res.send(data));
 }
 
 function getById(req, res) {
   models.Transport.find({
-    attributes: ['name', 'volume', 'maxWeight', 'speed'],
+    attributes: ['id', 'name', 'volume', 'maxWeight', 'speed'],
     where: {
       id: req.params.id,
     },

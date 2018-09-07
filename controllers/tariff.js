@@ -12,7 +12,7 @@ function create(req, res) {
 
 function getAll(req, res) {
   models.Tariff.findAll({
-    attributes: ['date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
+    attributes: ['id', 'date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
   }).then(data =>
     res.send(data));
 }

@@ -45,12 +45,12 @@ module.exports.user = {
 module.exports.storage = {
   create: {
     body: {
-      storageName: Joi.string().regex(/^[a-zA-Z0-9\s_\\-\\#№]+$/).min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
-      country: Joi.string().alphanum().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
-      region: Joi.string().regex(/^[a-zA-Z\s]+$/, 'alpha').min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
-      city: Joi.string().regex(/^[a-zA-Z\s]+$/, 'alpha').min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
-      street: Joi.string().regex(/^[a-zA-Z\s]+$/, 'alpha').min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
-      house: Joi.string().regex(/^[0-9]+[\s]*[a-zA-Z]*$/).min(1).max(10).required(), // eslint-disable-line newline-per-chained-call
+      storageName: Joi.string().regex(/^[a-zA-Z0-9А-Яа-яЁёЇїІіЄєҐґ\s_\\-\\#№]+$/).min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
+      country: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
+      region: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
+      city: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
+      street: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
+      house: Joi.string().min(1).max(10).required(), // eslint-disable-line newline-per-chained-call
       storageType: Joi.any().valid('less_than_30', 'more_than_30').required(), // eslint-disable-line newline-per-chained-call
     },
     options: {

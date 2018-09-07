@@ -17,7 +17,7 @@ function create(req, res) {
 
 function getAll(req, res) {
   models.Storage.findAll({
-    attributes: ['name', 'country', 'region', 'city', 'street', 'house', 'storageType'],
+    attributes: ['id', 'name', 'country', 'region', 'city', 'street', 'house', 'storageType'],
   }).then(data =>
     res.send(data));
 }
