@@ -9,6 +9,8 @@ router.post('/', validate(validationRules.tariff.create), tariffController.creat
 
 router.get('/', tariffController.getAll);
 
+router.get('/price', tariffController.getPrice);
+
 router.get('/:id', tariffController.getById);
 
 router.put('/:id', validate(validationRules.tariff.update), tariffController.update);

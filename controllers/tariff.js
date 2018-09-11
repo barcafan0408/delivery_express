@@ -10,7 +10,7 @@ function create(req, res) {
   );
 }
 
-function getAll(req, res) {
+function getAll(req, res) {  
   models.Tariff.findAll({
     attributes: ['id', 'date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
   }).then(data =>
@@ -23,6 +23,31 @@ function getById(req, res) {
     where: {
       id: req.params.id,
     },
+  }).then(data =>
+    res.send(data));
+}
+
+function getPrice(req, res) {
+  models.Tariff.findAll({
+    attributes: ['id', 'price'],
+    where: {
+      date: {
+        $lte: new Date()
+      },
+      idStorageSender: req.query.idStorageSender,
+      idStorageReceiver: req.query.idStorageReceiver,
+      minWeight: {
+        $lte: req.query.weight
+      },
+      maxWeight: {
+        $gte: req.query.weight
+      },
+      fragile: req.query.fragile === 'true',
+    },
+    order: [
+      ['date', 'DESC'],
+    ],
+    limit: 1,
   }).then(data =>
     res.send(data));
 }
@@ -49,6 +74,7 @@ module.exports = {
   create,
   getAll,
   getById,
+  getPrice,
   update,
   deleteById,
 };
