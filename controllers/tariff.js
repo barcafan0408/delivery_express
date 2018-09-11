@@ -10,7 +10,7 @@ function create(req, res) {
   );
 }
 
-function getAll(req, res) {  
+function getAll(req, res) {
   models.Tariff.findAll({
     attributes: ['id', 'date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
   }).then(data =>
@@ -32,15 +32,15 @@ function getPrice(req, res) {
     attributes: ['id', 'price'],
     where: {
       date: {
-        $lte: new Date()
+        $lte: new Date(),
       },
       idStorageSender: req.query.idStorageSender,
       idStorageReceiver: req.query.idStorageReceiver,
       minWeight: {
-        $lte: req.query.weight
+        $lte: req.query.weight,
       },
       maxWeight: {
-        $gte: req.query.weight
+        $gte: req.query.weight,
       },
       fragile: req.query.fragile === 'true',
     },
