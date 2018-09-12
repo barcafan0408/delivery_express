@@ -9,6 +9,8 @@ router.post('/', validate(validationRules.user.create), userController.create);
 
 router.get('/', validate(validationRules.user.getAll), userController.getAll);
 
+router.get('/phone/:phone', userController.getByPhone);
+
 router.get('/:id', userController.getById);
 
 router.put('/:id', validate(validationRules.user.update), userController.update);

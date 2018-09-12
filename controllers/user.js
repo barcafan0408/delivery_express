@@ -35,6 +35,16 @@ function getById(req, res) {
     res.send(data));
 }
 
+function getByPhone(req, res) {
+  models.User.find({
+    attributes: ['id', 'name', 'phone', 'email'],
+    where: {
+      phone: `+380${req.params.phone}`,
+    },
+  }).then(data =>
+    res.send(data));
+}
+
 function update(req, res) {
   const user = {};
   if (req.body.userName !== undefined) user.name = req.body.userName;
@@ -62,6 +72,7 @@ module.exports = {
   create,
   getAll,
   getById,
+  getByPhone,
   update,
   deleteById,
 };
