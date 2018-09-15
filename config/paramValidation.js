@@ -3,7 +3,7 @@ const Joi = require('joi');
 module.exports.user = {
   create: {
     body: {
-      userName: Joi.string().alphanum().min(3).max(30).required(), // eslint-disable-line newline-per-chained-call
+      userName: Joi.string().regex(/^[a-zA-ZА-Яа-яЁёЇїІіЄєҐґ\s\\-\\]+$/).min(3).max(50).required(), // eslint-disable-line newline-per-chained-call
       phone: Joi.string().regex(/^[0-9]+$/, 'numbers').length(9).required(),
       email: Joi.string().email({ minDomainAtoms: 2 }),
       password: Joi.string().regex(/^[a-zA-Z0-9_-]+$/).max(100),

@@ -1,4 +1,5 @@
 const models = require('../models');
+const db = require('../models');
 const httpStatus = require('http-status');
 const _ = require('lodash');
 
@@ -7,7 +8,7 @@ function create(req, res) {
     _.pick(req.body, ['date', 'number', 'status', 'idStorageSender', 'idStorageReceiver',
       'weight', 'amount', 'coment', 'idUserSender', 'idUserReceiver', 'fragile', 'cost'])
   ).then(data =>
-    res.status(httpStatus.CREATED).json({ id: data.get('id') }),
+    res.status(httpStatus.CREATED).json({ id: data.get('id'), number: data.get('number') }),
   );
 }
 
@@ -26,6 +27,22 @@ function getById(req, res) {
     },
   }).then(data =>
     res.send(data));
+}
+
+function getByNumber(req, res) {
+  const number = `${req.params.number}`;
+  const query = 'SELECT date, number, status, cost, userSender.name as sender, userReceiver.name as ' +
+                'receiver, storage.name as storage FROM delivery_db.Sendings ' +
+                'LEFT JOIN delivery_db.Users as userSender ON Sendings.idUserSender = userSender.id ' +
+                'LEFT JOIN delivery_db.Users as userReceiver ON Sendings.idUserReceiver = userReceiver.id ' +
+                'LEFT JOIN delivery_db.Storages as storage ON Sendings.idStorageReceiver = storage.id ' +
+                'WHERE number=';
+  db.sequelize.query(query + number,
+    {
+      plain: true,
+    })
+    .then(data =>
+      res.send(data));
 }
 
 function update(req, res) {
@@ -50,6 +67,7 @@ module.exports = {
   create,
   getAll,
   getById,
+  getByNumber,
   update,
   deleteById,
 };
