@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     createdAt: 'createDate',
     updatedAt: 'modifyDate',
-    //deletedAt: 'removeDate',
-    //paranoid: true,
+    // deletedAt: 'removeDate',
+    // paranoid: true,
   });
 
   return User;
