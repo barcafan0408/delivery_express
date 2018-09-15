@@ -15,8 +15,8 @@ const sequelize = new Sequelize(
     host: config.db.host,
     dialect: 'mysql',
     define: {
+      charset: 'utf8',
       dialectOptions: {
-        charset: 'utf8',
         collate: 'utf8_general_ci',
       },
     },
