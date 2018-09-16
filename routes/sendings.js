@@ -9,6 +9,8 @@ router.post('/', validate(validationRules.sending.create), sendingController.cre
 
 router.get('/', sendingController.getAll);
 
+router.get('/betweenStorages', sendingController.getbetweenStorages);
+
 router.get('/number/:number', sendingController.getByNumber);
 
 router.get('/:id', sendingController.getById);

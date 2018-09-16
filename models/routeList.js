@@ -18,15 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    idSending: {
-      type: DataTypes.INTEGER(11), // eslint-disable-line new-cap
-      foreignKey: true,
-      allowNull: false,
-      references: {
-        model: 'Sendings',
-        key: 'id',
-      },
-    },
     idTransport: {
       type: DataTypes.INTEGER(11), // eslint-disable-line new-cap
       foreignKey: true,

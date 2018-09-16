@@ -4,22 +4,34 @@ const _ = require('lodash');
 
 function create(req, res) {
   models.RouteList.create(
-  _.pick(req.body, ['date', 'expectingDate', 'actualDate', 'idSending', 'idTransport', 'idStorageSender', 'idStorageReceiver'])
-  ).then(data =>
-    res.status(httpStatus.CREATED).json({ id: data.get('id') }),
-  );
+  _.pick(req.body, ['date', 'expectingDate', 'idTransport', 'idStorageSender', 'idStorageReceiver'])
+  ).then((data) => {
+    req.body.sendings.map(el =>
+      models.RouteListSending.create({
+        idRouteList: data.get('id'),
+        idSending: el.value,
+      }).then(() => {
+        models.Sending.update({ status: 'en_route' }, {
+          where: {
+            id: el.value,
+          },
+        });
+      })
+      );
+    res.status(httpStatus.CREATED).json({ id: data.get('id') });
+  });
 }
 
 function getAll(req, res) {
   models.RouteList.findAll({
-    attributes: ['date', 'expectingDate', 'actualDate', 'idSending', 'idTransport', 'idStorageSender', 'idStorageReceiver'],
+    attributes: ['id', 'date', 'expectingDate', 'actualDate', 'idTransport', 'idStorageSender', 'idStorageReceiver'],
   }).then(data =>
     res.send(data));
 }
 
 function getById(req, res) {
   models.RouteList.find({
-    attributes: ['date', 'expectingDate', 'actualDate', 'idSending', 'idTransport', 'idStorageSender', 'idStorageReceiver'],
+    attributes: ['date', 'expectingDate', 'actualDate', 'idTransport', 'idStorageSender', 'idStorageReceiver'],
     where: {
       id: req.params.id,
     },

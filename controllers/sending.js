@@ -29,6 +29,18 @@ function getById(req, res) {
     res.send(data));
 }
 
+function getbetweenStorages(req, res) {
+  models.Sending.findAll({
+    attributes: ['id', 'number', 'weight'],
+    where: {
+      status: 'in_processing',
+      idStorageSender: req.query.idStorageSender,
+      idStorageReceiver: req.query.idStorageReceiver,
+    },
+  }).then(data =>
+    res.send(data));
+}
+
 function getByNumber(req, res) {
   const number = `${req.params.number}`;
   const query = 'SELECT date, number, status, cost, userSender.name as sender, userReceiver.name as ' +
@@ -67,6 +79,7 @@ module.exports = {
   create,
   getAll,
   getById,
+  getbetweenStorages,
   getByNumber,
   update,
   deleteById,
