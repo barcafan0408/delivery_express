@@ -2,14 +2,41 @@ const models = require('../models');
 const db = require('../models');
 const httpStatus = require('http-status');
 const _ = require('lodash');
+const nodemailer = require('nodemailer');
 
 function create(req, res) {
   models.Sending.create(
     _.pick(req.body, ['date', 'number', 'status', 'idStorageSender', 'idStorageReceiver',
       'weight', 'amount', 'coment', 'idUserSender', 'idUserReceiver', 'fragile', 'cost'])
-  ).then(data =>
-    res.status(httpStatus.CREATED).json({ id: data.get('id'), number: data.get('number') }),
-  );
+  ).then((data) => {
+    models.User.find({
+      attributes: ['email'],
+      where: {
+        id: req.body.idUserSender,
+      },
+    }).then((userData) => {
+      if (userData.email !== null) {
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.ukr.net',
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'adsfgs@ukr.net',
+            pass: 'hflboezj1',
+          },
+        });
+        const mailOptions = {
+          from: 'adsfgs@ukr.net',
+          to: userData.email,
+          subject: 'Email from delivery',
+          text: `You have created a new sending. Number of your sending - ${data.get('number')}. 
+          You can find information about your sending using this number!`,
+        };
+        transporter.sendMail(mailOptions);
+      }
+    });
+    res.status(httpStatus.CREATED).json({ id: data.get('id'), number: data.get('number') });
+  });
 }
 
 function getAll(req, res) {
