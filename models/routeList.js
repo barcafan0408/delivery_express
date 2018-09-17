@@ -45,6 +45,11 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+    complete: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   }, {
     timestamps: true,
     createdAt: 'createDate',

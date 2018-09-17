@@ -216,6 +216,7 @@ module.exports.routeList = {
       idTransport: Joi.number().integer().positive().required(),
       idStorageSender: Joi.number().integer().positive().required(),
       idStorageReceiver: Joi.number().integer().positive().required(),
+      complete: Joi.boolean(),
     },
     options: {
       allowUnknownBody: false,
@@ -236,6 +237,7 @@ module.exports.routeList = {
       idTransport: Joi.number().integer().positive().optional(),
       idStorageSender: Joi.number().integer().positive().optional(),
       idStorageReceiver: Joi.number().integer().positive().optional(),
+      complete: Joi.boolean().optional(),
     },
     options: {
       allowUnknownBody: false,

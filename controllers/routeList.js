@@ -1,4 +1,5 @@
 const models = require('../models');
+const db = require('../models');
 const httpStatus = require('http-status');
 const _ = require('lodash');
 
@@ -23,10 +24,36 @@ function create(req, res) {
 }
 
 function getAll(req, res) {
-  models.RouteList.findAll({
-    attributes: ['id', 'date', 'expectingDate', 'actualDate', 'idTransport', 'idStorageSender', 'idStorageReceiver'],
-  }).then(data =>
-    res.send(data));
+  const query = 'SELECT RouteLists.id, RouteLists.date, expectingDate, actualDate, transport.name as transport, storageSender.name as sender, ' +
+    'storageReceiver.name as receiver, sending.number FROM delivery_db.RouteLists ' +
+    'LEFT JOIN delivery_db.Transports as transport ON RouteLists.idTransport = transport.id ' +
+    'LEFT JOIN delivery_db.Storages as storageSender ON RouteLists.idStorageSender = storageSender.id ' +
+    'LEFT JOIN delivery_db.Storages as storageReceiver ON RouteLists.idStorageReceiver = storageReceiver.id ' +
+    'LEFT JOIN delivery_db.RouteListSendings as sendings ON RouteLists.id = sendings.idRouteList ' +
+    'LEFT JOIN delivery_db.Sendings as sending ON sendings.idSending = sending.id ' +
+    'WHERE RouteLists.removeDate is null AND !RouteLists.complete';
+  db.sequelize.query(query,
+    {
+      type: db.sequelize.QueryTypes.SELECT,
+    })
+    .then((data) => {
+      const results = [];
+      for (let i = 0; i < data.length; i += 1) {
+        const index = results.findIndex(element =>
+          element.id === data[i].id
+        );
+        if (index < 0) {
+          data[i].sendings = [data[i].number];
+          results.push(data[i]);
+        } else {
+          results[index].sendings.push(data[i].number);
+        }
+      }
+      for (let i = 0; i < results.length; i += 1) {
+        delete results[i].number;
+      }
+      res.send(results);
+    });
 }
 
 function getById(req, res) {
@@ -44,8 +71,23 @@ function update(req, res) {
     where: {
       id: req.params.id,
     },
-  }).then(() =>
-    res.sendStatus(httpStatus.OK));
+  }).then(() => {
+    models.RouteListSending.findAll({
+      attributes: ['idSending'],
+      where: {
+        idRouteList: req.params.id,
+      },
+    }).then((data) => {
+      data.map(el =>
+        models.Sending.update({ status: 'ready_to_giving' }, {
+          where: {
+            id: el.idSending,
+          },
+        }),
+      );
+    });
+    res.sendStatus(httpStatus.OK);
+  });
 }
 
 function deleteById(req, res) {
@@ -53,8 +95,23 @@ function deleteById(req, res) {
     where: {
       id: req.params.id,
     },
-  }).then(() =>
-    res.sendStatus(httpStatus.NO_CONTENT));
+  }).then(() => {
+    models.RouteListSending.findAll({
+      attributes: ['idSending'],
+      where: {
+        idRouteList: req.params.id,
+      },
+    }).then((data) => {
+      data.map(el =>
+        models.Sending.update({ status: 'in_processing' }, {
+          where: {
+            id: el.idSending,
+          },
+        }),
+      );
+    });
+    res.sendStatus(httpStatus.NO_CONTENT);
+  });
 }
 
 module.exports = {
