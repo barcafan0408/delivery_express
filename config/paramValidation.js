@@ -45,7 +45,7 @@ module.exports.user = {
 module.exports.storage = {
   create: {
     body: {
-      storageName: Joi.string().regex(/^[a-zA-Z0-9А-Яа-яЁёЇїІіЄєҐґ\s_\\-\\#№]+$/).min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
+      storageName: Joi.string().regex(/^[a-zA-Z0-9А-Яа-яЁёЇїІіЄєҐґ\s_\-#№]+$/).min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
       country: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
       region: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
       city: Joi.string().min(2).max(255).required(), // eslint-disable-line newline-per-chained-call
@@ -65,7 +65,7 @@ module.exports.storage = {
       id: Joi.number().integer().positive().required(),
     },
     body: {
-      storageName: Joi.string().regex(/^[a-zA-Z0-9\s_\\-\\#№]+$/).min(2).max(255).optional(), // eslint-disable-line newline-per-chained-call
+      storageName: Joi.string().regex(/^[a-zA-Z0-9\s_\-#№]+$/).min(2).max(255).optional(), // eslint-disable-line newline-per-chained-call
       country: Joi.string().alphanum().min(2).max(255).optional(), // eslint-disable-line newline-per-chained-call
       region: Joi.string().regex(/^[a-zA-Z\s]+$/, 'alpha').min(2).max(255).optional(), // eslint-disable-line newline-per-chained-call
       city: Joi.string().regex(/^[a-zA-Z\s]+$/, 'alpha').min(2).max(255).optional(), // eslint-disable-line newline-per-chained-call
@@ -85,7 +85,7 @@ module.exports.storage = {
 module.exports.transport = {
   create: {
     body: {
-      transportName: Joi.string().regex(/^[a-zA-Z0-9\s_\\-\\#№]+$/).min(3).max(255).required(), // eslint-disable-line newline-per-chained-call
+      transportName: Joi.string().regex(/^[a-zA-Z0-9\s_\-#№]+$/).min(3).max(255).required(), // eslint-disable-line newline-per-chained-call
       volume: Joi.number().integer().positive().max(1000).required(), // eslint-disable-line newline-per-chained-call
       maxWeight: Joi.number().integer().positive().max(10000).required(), // eslint-disable-line newline-per-chained-call
       speed: Joi.number().integer().positive().max(200).required(), // eslint-disable-line newline-per-chained-call
@@ -102,7 +102,7 @@ module.exports.transport = {
       id: Joi.number().integer().positive().required(),
     },
     body: {
-      transportName: Joi.string().regex(/^[a-zA-Z0-9\s_\\-\\#№]+$/).min(3).max(255).optional(), // eslint-disable-line newline-per-chained-call
+      transportName: Joi.string().regex(/^[a-zA-Z0-9\s_\-#№]+$/).min(3).max(255).optional(), // eslint-disable-line newline-per-chained-call
       volume: Joi.number().integer().positive().max(1000).optional(), // eslint-disable-line newline-per-chained-call
       maxWeight: Joi.number().integer().positive().max(10000).optional(), // eslint-disable-line newline-per-chained-call
       speed: Joi.number().integer().positive().max(200).optional(), // eslint-disable-line newline-per-chained-call
