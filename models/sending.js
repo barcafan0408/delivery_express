@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(25), // eslint-disable-line new-cap
       allowNull: false,
       validate: { isNumeric: true },
+      unique: true,
     },
     status: DataTypes.ENUM('in_processing', 'en_route', 'ready_to_giving'), // eslint-disable-line new-cap
     idStorageSender: {
