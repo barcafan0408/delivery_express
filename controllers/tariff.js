@@ -1,4 +1,5 @@
 const models = require('../models');
+const db = require('../models');
 const httpStatus = require('http-status');
 const _ = require('lodash');
 
@@ -11,10 +12,17 @@ function create(req, res) {
 }
 
 function getAll(req, res) {
-  models.Tariff.findAll({
-    attributes: ['id', 'date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'],
-  }).then(data =>
-    res.send(data));
+  const query = 'SELECT Tariffs.id, date, idStorageSender, idStorageReceiver, minWeight, maxWeight, fragile, price, ' +
+                'storageSender.name as storageSenderName, storageReceiver.name as storageReceiverName FROM delivery_db.Tariffs ' +
+                'LEFT JOIN delivery_db.Storages as storageSender ON Tariffs.idStorageSender = storageSender.id ' +
+                'LEFT JOIN delivery_db.Storages as storageReceiver ON Tariffs.idStorageReceiver = storageReceiver.id ' +
+                'WHERE Tariffs.removeDate is null';
+  db.sequelize.query(query,
+    {
+      type: db.sequelize.QueryTypes.SELECT,
+    })
+    .then(data =>
+      res.send(data));
 }
 
 function getById(req, res) {
