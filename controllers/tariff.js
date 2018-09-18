@@ -3,6 +3,9 @@ const db = require('../models');
 const httpStatus = require('http-status');
 const _ = require('lodash');
 
+const env = process.env.NODE_ENV || 'development';
+const config = require(`${__dirname}/../config/config.js`)[env];
+
 function create(req, res) {
   models.Tariff.create(
     _.pick(req.body, ['date', 'idStorageSender', 'idStorageReceiver', 'minWeight', 'maxWeight', 'fragile', 'price'])
@@ -12,8 +15,8 @@ function create(req, res) {
 }
 
 function getAll(req, res) {
-  const query = 'SELECT Tariffs.id, date, idStorageSender, idStorageReceiver, minWeight, maxWeight, fragile, price, ' +
-                'storageSender.name as storageSenderName, storageReceiver.name as storageReceiverName FROM delivery_db.Tariffs ' +
+  const query = `${'SELECT Tariffs.id, date, idStorageSender, idStorageReceiver, minWeight, maxWeight, fragile, price, ' +
+                'storageSender.name as storageSenderName, storageReceiver.name as storageReceiverName FROM '}${config.db.name}.Tariffs ` +
                 'LEFT JOIN delivery_db.Storages as storageSender ON Tariffs.idStorageSender = storageSender.id ' +
                 'LEFT JOIN delivery_db.Storages as storageReceiver ON Tariffs.idStorageReceiver = storageReceiver.id ' +
                 'WHERE Tariffs.removeDate is null';
