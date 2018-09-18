@@ -61,7 +61,7 @@ function getPrice(req, res) {
 }
 
 function update(req, res) {
-  models.Tariff.update(_.pickBy(req.body), {
+  models.Tariff.update(req.body, {
     where: {
       id: req.params.id,
     },
