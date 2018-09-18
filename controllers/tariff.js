@@ -15,11 +15,11 @@ function create(req, res) {
 }
 
 function getAll(req, res) {
-  const query = `${'SELECT Tariffs.id, date, idStorageSender, idStorageReceiver, minWeight, maxWeight, fragile, price, ' +
-                'storageSender.name as storageSenderName, storageReceiver.name as storageReceiverName FROM '}${config.db.name}.Tariffs ` +
-                'LEFT JOIN delivery_db.Storages as storageSender ON Tariffs.idStorageSender = storageSender.id ' +
-                'LEFT JOIN delivery_db.Storages as storageReceiver ON Tariffs.idStorageReceiver = storageReceiver.id ' +
-                'WHERE Tariffs.removeDate is null';
+  const query = `SELECT Tariffs.id, date, idStorageSender, idStorageReceiver, minWeight, maxWeight, fragile, price, 
+                storageSender.name as storageSenderName, storageReceiver.name as storageReceiverName FROM ${config.db.name}.Tariffs
+                LEFT JOIN ${config.db.name}.Storages as storageSender ON Tariffs.idStorageSender = storageSender.id 
+                LEFT JOIN ${config.db.name}.Storages as storageReceiver ON Tariffs.idStorageReceiver = storageReceiver.id 
+                WHERE Tariffs.removeDate is null`;
   db.sequelize.query(query,
     {
       type: db.sequelize.QueryTypes.SELECT,

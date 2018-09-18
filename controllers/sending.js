@@ -4,6 +4,9 @@ const httpStatus = require('http-status');
 const _ = require('lodash');
 const nodemailer = require('nodemailer');
 
+const env = process.env.NODE_ENV || 'development';
+const config = require(`${__dirname}/../config/config.js`)[env];
+
 function create(req, res) {
   models.Sending.create(
     _.pick(req.body, ['date', 'number', 'status', 'idStorageSender', 'idStorageReceiver',
@@ -69,14 +72,13 @@ function getbetweenStorages(req, res) {
 }
 
 function getByNumber(req, res) {
-  const number = `${req.params.number}`;
-  const query = 'SELECT date, number, status, cost, userSender.name as sender, userReceiver.name as ' +
-                'receiver, storage.name as storage FROM delivery_db.Sendings ' +
-                'LEFT JOIN delivery_db.Users as userSender ON Sendings.idUserSender = userSender.id ' +
-                'LEFT JOIN delivery_db.Users as userReceiver ON Sendings.idUserReceiver = userReceiver.id ' +
-                'LEFT JOIN delivery_db.Storages as storage ON Sendings.idStorageReceiver = storage.id ' +
-                'WHERE number=';
-  db.sequelize.query(query + number,
+  const query = `SELECT date, number, status, cost, userSender.name as sender, userReceiver.name as 
+                receiver, storage.name as storage FROM ${config.db.name}.Sendings 
+                LEFT JOIN ${config.db.name}.Users as userSender ON Sendings.idUserSender = userSender.id 
+                LEFT JOIN ${config.db.name}.Users as userReceiver ON Sendings.idUserReceiver = userReceiver.id 
+                LEFT JOIN ${config.db.name}.Storages as storage ON Sendings.idStorageReceiver = storage.id 
+                WHERE number=${req.params.number}`;
+  db.sequelize.query(query,
     {
       plain: true,
     })
